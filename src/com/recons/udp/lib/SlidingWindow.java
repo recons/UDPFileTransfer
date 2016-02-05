@@ -5,7 +5,7 @@ package com.recons.udp.lib;
  * https://pkasko.com/
  */
 public class SlidingWindow<T> {
-    private final CircularFifoQueue<T> queue;
+    private final CircularFixedBlockingDeque<T> deque;
     private int size;
 
     public SlidingWindow(int size) {
@@ -13,13 +13,25 @@ public class SlidingWindow<T> {
         this.size = size;
     }
 
-    public T move() throws InterruptedException {
-        return deque.remove();
+    public T move() {
+        T result = deque.remove();
+        return result;
     }
 
-    public void read(T data) throws InterruptedException {
+    public void read(T data) {
         deque.push(data);
     }
 
+    public T get(int i) {
+        return deque.get(i);
+    }
 
+
+    public int getCurrentStart() {
+        return deque.head();
+    }
+
+    public int getCurrentEnd() {
+        return deque.tail();
+    }
 }
